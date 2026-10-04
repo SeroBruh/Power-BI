@@ -1,0 +1,320 @@
+table bikeshare_trips
+	lineageTag: 75e75c0d-66b7-44b2-8d13-bc14a77b6131
+
+	measure trip_count = COUNTROWS(bikeshare_trips)
+		formatString: 0
+		lineageTag: 3310219e-bc06-4af8-9caf-73160778a613
+
+	measure 'MoM % Change' = ```
+			
+			VAR CurrentPeriod = COUNTROWS(bikeshare_trips)
+			VAR PreviousPeriod = CALCULATE(COUNTROWS(bikeshare_trips), DATEADD('DateTable'[Date], -1, MONTH),REMOVEFILTERS('DateTable'))
+			RETURN
+			    DIVIDE(CurrentPeriod - PreviousPeriod, PreviousPeriod, 0)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 8eea770f-bab4-4e73-a863-c225b0493334
+
+	measure 'QoQ % Change' = ```
+			
+			VAR CurrentPeriod = COUNTROWS(bikeshare_trips)
+			VAR PreviousPeriod = CALCULATE(COUNTROWS(bikeshare_trips), DATEADD('DateTable'[Date], -1, QUARTER),REMOVEFILTERS('DateTable'))
+			RETURN
+			    DIVIDE(CurrentPeriod - PreviousPeriod, PreviousPeriod, 0)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 2ac47ae2-771c-43d8-be39-434e02287527
+
+	measure 'YoY % Change' = ```
+			
+			VAR CurrentPeriod = COUNTROWS('bikeshare_trips')
+			VAR PreviousPeriod = CALCULATE(COUNTROWS('bikeshare_trips'), DATEADD('DateTable'[Date], -1, YEAR),REMOVEFILTERS('DateTable'))
+			RETURN
+			    DIVIDE(CurrentPeriod - PreviousPeriod, PreviousPeriod, 0)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 96bdf8e4-9bc5-4905-9e05-8a8a4aafdfa1
+
+	measure daily_trips_average =
+			DIVIDE(
+			    CALCULATE(COUNTROWS('bikeshare_trips'), ALL('bikeshare_trips')),
+			    CALCULATE(COUNTROWS('DateTable'), ALL('DateTable')),
+			    0
+			)
+		lineageTag: a8cbe78c-6183-4821-b74a-592a2f578cf8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure AVGDuration = ```
+			AVERAGE('bikeshare_trips'[duration_sec])
+			
+			```
+		lineageTag: 8649e2f5-42f3-4a8c-8068-04ef96afb406
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Hourly Volume' =
+			
+			CALCULATE(
+			    COUNTROWS('bikeshare_trips'),
+			    REMOVEFILTERS('DateTable')
+			)
+		formatString: 0
+		lineageTag: 2879957d-a9a2-45cf-94c9-ec329ee0e59c
+
+	measure sanjose =
+			CALCULATE(
+			    COUNTROWS('bikeshare_trips'),
+			    REMOVEFILTERS('DateTable'[Year]),
+			    REMOVEFILTERS('DateTable'[Quarter]),
+			    'bikeshare_regions'[name] = "San Jose"
+			)
+		formatString: 0
+		lineageTag: 23635ded-a4aa-4f5f-a154-de9ab416106f
+
+	column trip_id
+		dataType: string
+		lineageTag: 25e4b24c-801a-44f0-b3b5-a5fa3a6a951a
+		summarizeBy: none
+		sourceColumn: trip_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column duration_sec
+		dataType: int64
+		formatString: 0
+		lineageTag: 591c466d-f40a-481d-bf24-1059372f029c
+		summarizeBy: sum
+		sourceColumn: duration_sec
+
+		annotation SummarizationSetBy = Automatic
+
+	column start_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7c7c3ac7-1b9c-46e4-b40f-85c4188a1250
+		summarizeBy: none
+		sourceColumn: start_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column start_station_name
+		dataType: string
+		lineageTag: 0e32f680-85f2-4f6a-b1eb-22d886379c30
+		summarizeBy: none
+		sourceColumn: start_station_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column start_station_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 96cf359d-f0c8-4792-8712-4a7bf7587dde
+		summarizeBy: sum
+		sourceColumn: start_station_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column end_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6804e23d-94a0-42e6-8338-de5720cda5ae
+		summarizeBy: none
+		sourceColumn: end_date
+
+		variation Variation
+			isDefault
+			relationship: 970cb4a3-4e6f-476d-8136-4c23035bb9cc
+			defaultHierarchy: LocalDateTable_e6ccb78d-eac4-4571-9aab-606c424d0b7d.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column end_station_name
+		dataType: string
+		lineageTag: d96e4dda-98c6-419e-ab75-a5768ac5be82
+		summarizeBy: none
+		sourceColumn: end_station_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column end_station_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 8882ac1d-ceb0-4314-82c2-d83a0541f71f
+		summarizeBy: sum
+		sourceColumn: end_station_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column bike_number
+		dataType: int64
+		formatString: 0
+		lineageTag: c43f9c47-3289-4395-9b68-153a80a03292
+		summarizeBy: sum
+		sourceColumn: bike_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column zip_code
+		dataType: string
+		lineageTag: 47b22f7b-ef64-4171-b2af-41d7807ac0a5
+		summarizeBy: none
+		sourceColumn: zip_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column subscriber_type
+		dataType: string
+		lineageTag: 38e888c7-3bca-48e8-ab0b-4e49546d5366
+		summarizeBy: none
+		sourceColumn: subscriber_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column c_subscription_type
+		dataType: string
+		lineageTag: 3e2dca0c-78e3-4538-87bc-8279cfde8e91
+		summarizeBy: none
+		sourceColumn: c_subscription_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column start_station_latitude
+		dataType: double
+		lineageTag: 0b29dffe-5da9-4ec1-b986-fe3c3e4cd750
+		dataCategory: Latitude
+		summarizeBy: sum
+		sourceColumn: start_station_latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column start_station_longitude
+		dataType: double
+		lineageTag: 85334234-6f8f-4259-b6e6-51ac6aa24d47
+		dataCategory: Longitude
+		summarizeBy: sum
+		sourceColumn: start_station_longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column end_station_latitude
+		dataType: double
+		lineageTag: 5684f86a-5091-4f00-91e1-82d1e55b0c6a
+		dataCategory: Latitude
+		summarizeBy: sum
+		sourceColumn: end_station_latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column end_station_longitude
+		dataType: double
+		lineageTag: 317d63ec-23b9-41c5-8782-0a1de690eb69
+		dataCategory: Longitude
+		summarizeBy: sum
+		sourceColumn: end_station_longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column member_birth_year
+		dataType: int64
+		formatString: 0
+		lineageTag: 6cf635c8-ad20-4ea6-90df-f6182a782c07
+		summarizeBy: sum
+		sourceColumn: member_birth_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column member_gender
+		dataType: string
+		lineageTag: c276ab84-83dc-4c3e-bc5a-e8968edc42fd
+		summarizeBy: none
+		sourceColumn: member_gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column bike_share_for_all_trip
+		dataType: string
+		lineageTag: 765cb608-9d92-4c92-8f33-56b0c6329a65
+		summarizeBy: none
+		sourceColumn: bike_share_for_all_trip
+
+		annotation SummarizationSetBy = Automatic
+
+	column start_station_geom
+		dataType: string
+		lineageTag: c3e6d3c7-d179-44ab-95ad-a93aadfb8101
+		summarizeBy: none
+		sourceColumn: start_station_geom
+
+		annotation SummarizationSetBy = Automatic
+
+	column end_station_geom
+		dataType: string
+		lineageTag: 54ef5591-173d-4490-9eef-18426eb0ade4
+		summarizeBy: none
+		sourceColumn: end_station_geom
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Start Hour' = HOUR('bikeshare_trips'[start_date])
+		formatString: 0
+		lineageTag: 48b0d3d9-ea7f-4fb4-9d7d-162fda2a0a74
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column trip = ```
+			'bikeshare_trips'[start_station_name] & " --> " & 'bikeshare_trips'[end_station_name]
+			
+			```
+		lineageTag: c7dc8ffe-c7d0-4c5d-b944-cd2380f370b5
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column age_group = ```
+			
+			VAR age = 2026 - 'bikeshare_trips'[member_birth_year]
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        ISBLANK('bikeshare_trips'[member_birth_year]), "Unknown",
+			        age <= 25, "Under 25",
+			        age <= 35, "26 - 35",
+			        age <= 50, "36 - 50",
+			        age <= 65, "51 - 65",
+			        age <= 80, "66 - 80",
+			        age > 80, "Over 80",
+			        "Unknown"
+			    )
+			
+			```
+		lineageTag: 8ade9b2d-a8cd-4852-99f9-5de7455f7125
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition bikeshare_trips = m
+		mode: import
+		source =
+				let
+				    Source = GoogleBigQuery.Database([Implementation="2.0"]),
+				    #"bigquery-public-data_Database" = Source{[Name="bigquery-public-data",Kind="Database"]}[Data],
+				    san_francisco_bikeshare_Schema = #"bigquery-public-data_Database"{[Name="san_francisco_bikeshare",Kind="Schema"]}[Data],
+				    bikeshare_trips_Table = san_francisco_bikeshare_Schema{[Name="bikeshare_trips",Kind="Table"]}[Data]
+				in
+				    bikeshare_trips_Table
+
+	annotation PBI_ResultType = Table
+

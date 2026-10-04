@@ -1,0 +1,73 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 86.435331230283907,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "nodeIndex": "bikeshare_regions",
+          "nodeLineageTag": "325e6068-7829-41e0-b99f-be00d61cb666",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 335,
+            "y": 0
+          },
+          "nodeIndex": "bikeshare_station_info",
+          "nodeLineageTag": "03588f4c-aa39-46fa-80a5-7692f084c314",
+          "size": {
+            "height": 373,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 578,
+            "y": 0
+          },
+          "nodeIndex": "bikeshare_trips",
+          "nodeLineageTag": "75e75c0d-66b7-44b2-8d13-bc14a77b6131",
+          "size": {
+            "height": 535,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 862,
+            "y": 167.5
+          },
+          "nodeIndex": "DateTable",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 90.510948905109487,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

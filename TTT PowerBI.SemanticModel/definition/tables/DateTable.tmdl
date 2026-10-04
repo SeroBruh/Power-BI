@@ -1,0 +1,106 @@
+table DateTable
+	lineageTag: a2929a5b-8261-4d3c-8ae7-afa880972f41
+
+	column Date
+		formatString: General Date
+		lineageTag: ea665f04-b5ee-4d3b-aa8e-546353610455
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: 88b64287-945f-4ed6-afb1-36a3ab319b32
+			defaultHierarchy: LocalDateTable_3471943f-a1a3-4475-890c-d4ee618d6845.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		formatString: 0
+		lineageTag: b036b4f6-8328-4bdb-9362-c09e1d9d9e5a
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		lineageTag: 2f3a8c57-b4b9-4be5-9477-33ed544c9801
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNo
+		formatString: 0
+		lineageTag: 55b7eb9d-7e5a-4951-bcb3-e8a2350388fd
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [MonthNo]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		lineageTag: 63502719-1c2a-4550-800b-8f5461b3cbc0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month]
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonthNo
+		formatString: 0
+		lineageTag: a9faf520-eadc-42af-a530-0d969560e0f9
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [YearMonthNo]
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonth
+		lineageTag: fda74821-c5e5-4be4-8412-b10a9c133b8d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearMonth]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayName = FORMAT('DateTable'[Date], "dddd")
+		lineageTag: 9d7a0830-9ea3-4e07-857a-186f4300aa5d
+		summarizeBy: none
+		sortByColumn: DayOfWeekNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayOfWeekNumber = ```
+			WEEKDAY('DateTable'[Date], 2) 
+			
+			```
+		formatString: 0
+		lineageTag: f74247f5-397b-42bf-8834-c195c1dc71b5
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DateTable = calculated
+		mode: import
+		source = ```
+				
+				VAR MinYear = YEAR(MIN('bikeshare_trips'[start_date]))
+				VAR MaxYear = YEAR(MAX('bikeshare_trips'[start_date]))
+				RETURN
+				ADDCOLUMNS (
+				    CALENDAR ( DATE ( MinYear, 1, 1 ), DATE ( MaxYear, 12, 31 ) ),
+				    "Year", YEAR ( [Date] ),
+				    "Quarter", "Q" & FORMAT ( [Date], "q" ),
+				    "MonthNo", MONTH ( [Date] ),
+				    "Month", FORMAT ( [Date], "mmmm" ),
+				    "YearMonthNo", INT(FORMAT([Date], "YYYYMM")),
+				    "YearMonth", FORMAT ( [Date], "mmm YYYY" )
+				)
+				
+				```
+
+	annotation PBI_Id = f7d1654486a94b9eb6db2b9408d8400a
+

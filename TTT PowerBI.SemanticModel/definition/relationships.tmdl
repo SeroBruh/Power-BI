@@ -1,0 +1,18 @@
+relationship 970cb4a3-4e6f-476d-8136-4c23035bb9cc
+	joinOnDateBehavior: datePartOnly
+	fromColumn: bikeshare_trips.end_date
+	toColumn: LocalDateTable_e6ccb78d-eac4-4571-9aab-606c424d0b7d.Date
+
+relationship AutoDetected_8630c2b6-d5b1-4ca0-be5d-a96c2cbb482b
+	fromColumn: bikeshare_station_info.region_id
+	toColumn: bikeshare_regions.region_id
+
+relationship 88b64287-945f-4ed6-afb1-36a3ab319b32
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DateTable.Date
+	toColumn: LocalDateTable_3471943f-a1a3-4475-890c-d4ee618d6845.Date
+
+relationship 68bfe5f2-e9cf-24b9-8642-5f2f05fdaf8d
+	fromColumn: bikeshare_trips.start_date
+	toColumn: DateTable.Date
+
